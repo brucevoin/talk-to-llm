@@ -3,7 +3,7 @@ Description: r
 Author: haichun feng
 Date: 2024-03-22 17:42:13
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 18:03:49
+LastEditTime: 2024-03-26 18:06:38
 '''
 
 
@@ -24,7 +24,6 @@ def audio_input():
 def asr():
     asr_instance = ASR()
     asr_instance.Scan_and_asr()
-
 
 
 ## 考虑将Recorder与ASR合并
