@@ -23,14 +23,17 @@ class ASR:
     def __init__(self):
         self.model = whisper.load_model("base")
         self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
+        self.queue = CircularQueue(size=30)
 
     def Scan_and_asr(self):
         wav_num = 0
         while True:
             file_path = f"{self.AUDIO_FILES_DIRECTORY}/output_{wav_num}.wav"
             if os.path.exists(file_path) and os.access(file_path, os.R_OK):
+                print(f"detect audio file:{file_path}")
                 asr_input = self.Asr(file_path)
-                os.remove(file_path)
+                ## 测试时不删除文件
+                ## os.remove(file_path)
                 wav_num += 1
                 ## TODO 录音与ASR之间需要同步控制状态信息
                 if wav_num == 10:
@@ -39,9 +42,33 @@ class ASR:
                 time.sleep(5)
 
     def Asr(self, wav_file):
-        result = self.model.transcribe(wav_file)
-        print(result["text"])
-        return result["text"]
+        stream = self.model.transcribe(
+            wav_file, initial_prompt="", condition_on_previous_text=True
+        )
+
+        for segment in stream["segments"]:
+            s = Segment(
+                text=segment["text"],
+                start=segment["start"],
+                end=segment["end"],
+                no_speech_prob=segment["no_speech_prob"],
+            )
+            print(segment)
+            print(f"-------------{s.calculate_no_speech_time()}")
+            if self.Is_a_break(s):
+                self.queue.enqueue(s)
+                print(self.queue.dequeue_all())
+            else:
+                self.queue.enqueue(s)
+
+    def Is_a_break(self, segment):
+        if segment.no_speech_prob >0.5:
+            return True
+        if segment.calculate_no_speech_time() >= 3:
+            return True
+        if self.queue.last_item is not None and (5 - segment.start) + (5 - self.queue.last_item.end) >= 3:
+            return True
+        return False
 
 
 class Segment:
@@ -82,38 +109,11 @@ class CircularQueue:
     def dequeue_all(self):
         text = ""
         if not self.is_empty():
-            text += self.dequeue()
-
-        print(text)
+            text += self.dequeue().text
         return text
 
+
 ## 以下代码为测试
-
-# 加载模型
-model = whisper.load_model("base")
-
-file_path = f"/Users/fhc/Downloads/output_1.wav"
-# 进行流式识别
-stream = model.transcribe(file_path, initial_prompt="", condition_on_previous_text=True)
-
-print(stream)
-
-queue = CircularQueue(size=30)
-
-for segment in stream["segments"]:
-    s = Segment(
-        text=segment["text"],
-        start=segment["start"],
-        end=segment["end"],
-        no_speech_prob=segment["no_speech_prob"],
-    )
-    if s.no_speech_prob > 0.5:
-        queue.dequeue_all()
-    if (queue.last_item is None):
-        queue.enqueue(s)
-    elif queue.last_item.calculate_no_speech_time() + s.calculate_no_speech_time() > 3:
-        queue.enqueue(s)
-        # 触发思考动作
-        queue.dequeue_all()
-    else:
-        queue.enqueue(s)
+if __name__ == "__main__":
+    asr = ASR()
+    asr.Scan_and_asr()
