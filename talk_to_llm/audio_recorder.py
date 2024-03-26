@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 11:43:17
+LastEditTime: 2024-03-26 17:32:48
 '''
 """
 Description: 
@@ -80,5 +80,6 @@ class AudioInput:
         self.stream.close()
         self.audio.terminate()
 
-instance = AudioInput()
-instance.Listening()
+if __name__ == "__main__":
+    instance = AudioInput()
+    instance.Listening()

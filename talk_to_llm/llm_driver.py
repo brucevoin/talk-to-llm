@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 14:21:58
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 16:41:50
+LastEditTime: 2024-03-26 17:44:16
 '''
 
 
@@ -11,7 +11,7 @@ from llama_index.llms.ollama import Ollama
 from llama_index.core import Settings
 
 
-class Brain:
+class LlmDriver:
     def __init__(self):
         # setting up the llm
         self.llm = llm = Ollama(model="gemma:2b", request_timeout=60.0) 
@@ -28,5 +28,5 @@ class Brain:
 
 # Just for Test
 if __name__ == "__main__":
-    brain = Brain()
+    brain = LlmDriver()
     brain.think('你好')
