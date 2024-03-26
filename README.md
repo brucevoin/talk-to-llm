@@ -6,6 +6,7 @@ This project aims to build a tool to talk with your local LLM(Ollama) smoothly.
 
 ### ASR
 
+- portaudio
 - pyaudio :for recording audio
 - whisper : for automatic speech recognition
 
@@ -17,3 +18,7 @@ This project aims to build a tool to talk with your local LLM(Ollama) smoothly.
 
 - xtts_v2(include voice cloning)
 - Or EmotiVoice from netease
+
+## Develop
+
+- python 3.10.13

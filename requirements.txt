@@ -1,0 +1,4 @@
+PyObjC
+playsound
+llama-index
+llama-index-llms-ollama
