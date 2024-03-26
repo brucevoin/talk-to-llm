@@ -15,5 +15,5 @@ This project aims to build a tool to talk with your local LLM(Ollama) smoothly.
 
 ### TTS
 
-- whisper from Openai 
+- xtts_v2(include voice cloning)
 - Or EmotiVoice from netease
