@@ -1,13 +1,20 @@
+<!--
+ * @Description: 
+ * @Author: haichun feng
+ * @Date: 2024-03-26 16:05:29
+ * @LastEditor: haichun feng
+ * @LastEditTime: 2024-03-26 17:23:39
+-->
 # talk-to-llm
 
 This project aims to build a tool to talk with your local LLM(Ollama) smoothly.
 
-## involled technicals
+## involved technics
 
 ### ASR
 
 - portaudio
-- pyaudio :for recording audio
+- pyaudio : for recording audio
 - whisper : for automatic speech recognition
 
 ### Local LLMs
@@ -17,7 +24,7 @@ This project aims to build a tool to talk with your local LLM(Ollama) smoothly.
 ### TTS
 
 - xtts_v2(include voice cloning)
-- Or EmotiVoice from netease
+- Or EmotiVoice(rom NetEase)
 
 ## Develop
 

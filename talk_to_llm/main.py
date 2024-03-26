@@ -3,15 +3,9 @@ Description: r
 Author: haichun feng
 Date: 2024-03-22 17:42:13
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 17:48:58
+LastEditTime: 2024-03-26 18:03:49
 '''
-"""
-Description: 
-Author: haichun feng
-Date: 2024-03-22 17:42:13
-LastEditor: haichun feng
-LastEditTime: 2024-03-25 17:48:24
-"""
+
 
 from voice_recorder2 import AudioInput
 from asr import ASR
