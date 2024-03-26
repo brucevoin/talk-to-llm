@@ -3,20 +3,15 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 17:32:48
+LastEditTime: 2024-03-26 18:02:00
 '''
-"""
-Description: 
-Author: haichun feng
-Date: 2024-03-22 17:59:19
-LastEditor: haichun feng
-LastEditTime: 2024-03-25 17:42:27
-"""
 
 import pyaudio
 import wave
 import time
 import os
+
+from config_reader import Get_AUDIO_FILES_DIRECTORY
 
 
 class AudioInput:
@@ -31,6 +26,7 @@ class AudioInput:
         self.audio = pyaudio.PyAudio()
         self.stream = pyaudio.Stream
         self.FILE_COUNT_LIMIT = 10
+        self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
 
     def Listening(self):
         self.stream = self.audio.open(
@@ -54,7 +50,7 @@ class AudioInput:
             # 每隔RECORD_SECONDS秒写入一个WAV文件
             if elapsed_time >= self.RECORD_SECONDS:
                 # 保存WAV文件
-                file_path = f"/Users/fhc/Downloads/output_{wav_num}.wav"
+                file_path = f"{self.AUDIO_FILES_DIRECTORY}/output_{wav_num}.wav"
                 waveFile = wave.open(file_path, "wb")
                 waveFile.setnchannels(self.CHANNELS)
                 waveFile.setsampwidth(self.audio.get_sample_size(self.FORMAT))
@@ -68,7 +64,7 @@ class AudioInput:
 
                 wav_num += 1
                 if wav_num  >= self.FILE_COUNT_LIMIT:
-                    file_path0 = "/Users/fhc/Downloads/output_0.wav"
+                    file_path0 = f"{self.AUDIO_FILES_DIRECTORY}/output_0.wav"
                     if (os.path.exists(file_path0)):
                         self.FILE_COUNT_LIMIT *= 2
                     else:

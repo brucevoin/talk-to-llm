@@ -16,15 +16,18 @@ import os
 import time
 from collections import deque
 
+from config_reader import Get_AUDIO_FILES_DIRECTORY
+
 
 class ASR:
     def __init__(self):
         self.model = whisper.load_model("base")
+        self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
 
     def Scan_and_asr(self):
         wav_num = 0
         while True:
-            file_path = f"/Users/fhc/Downloads/output_{wav_num}.wav"
+            file_path = f"{self.AUDIO_FILES_DIRECTORY}/output_{wav_num}.wav"
             if os.path.exists(file_path) and os.access(file_path, os.R_OK):
                 asr_input = self.Asr(file_path)
                 os.remove(file_path)
