@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 18:02:00
+LastEditTime: 2024-03-26 18:17:47
 '''
 
 import pyaudio
@@ -14,7 +14,7 @@ import os
 from config_reader import Get_AUDIO_FILES_DIRECTORY
 
 
-class AudioInput:
+class AudioRecorder:
 
     def __init__(self):
         self.FORMAT = pyaudio.paInt16
@@ -77,5 +77,5 @@ class AudioInput:
         self.audio.terminate()
 
 if __name__ == "__main__":
-    instance = AudioInput()
+    instance = AudioRecorder()
     instance.Listening()

@@ -7,7 +7,7 @@ LastEditTime: 2024-03-26 18:06:38
 '''
 
 
-from voice_recorder2 import AudioInput
+from audio_recorder import AudioRecorder
 from asr import ASR
 import threading
 import time
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.ERROR)
 
 
 def audio_input():
-    audioInput_instance = AudioInput()
+    audioInput_instance = AudioRecorder()
     audioInput_instance.Listening()
 
 
