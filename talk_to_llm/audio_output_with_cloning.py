@@ -3,20 +3,21 @@ Description:
 Author: haichun feng
 Date: 2024-03-26 16:06:49
 LastEditor: haichun feng
-LastEditTime: 2024-03-27 14:33:27
+LastEditTime: 2024-03-27 17:27:48
 '''
 
 from playsound import playsound
 from TTS.api import TTS
 
-from config_reader import get_AUDIO_FILES_DIRECTORY
+from config_reader import ConfigManager
 
 
 class AudioOutput:
-    def __init__(self):
+    def __init__(self, config):
+        self.config = config
         print("loading TTS model")
         self.tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
-        self.AUDIO_FILES_DIRECTORY = get_AUDIO_FILES_DIRECTORY()
+        self.AUDIO_FILES_DIRECTORY = config.get_config('AUDIO_FILES_DIRECTORY')
 
     def speak(self, text_str):
 
@@ -36,7 +37,8 @@ class AudioOutput:
 
 
 if __name__ == "__main__":
-    mouth = AudioOutput()
+    config = ConfigManager()
+    mouth = AudioOutput(config = config)
     mouth.speak(
         "我是一个聊天机器人。我是一个根据自然语言处理的技术开发的语言模型。我能够理解和生成人类语言，并可以用于多种任务，例如对话、作文、翻译等。"
     )
