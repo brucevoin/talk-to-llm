@@ -1,0 +1,3 @@
+from config_reader import AUDIO_FILES_DIRECTORY
+
+print(AUDIO_FILES_DIRECTORY)

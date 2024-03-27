@@ -16,13 +16,14 @@ import os
 import time
 from collections import deque
 
-from config_reader import Get_AUDIO_FILES_DIRECTORY
+from config_reader import ConfigManager
 
 
 class ASR:
-    def __init__(self):
+    def __init__(self,config):
+        self.config = config
         self.model = whisper.load_model("base")
-        self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
+        self.AUDIO_FILES_DIRECTORY = config.get_config('AUDIO_FILES_DIRECTORY')
         self.queue = CircularQueue(size=30)
 
     def Scan_and_asr(self):
@@ -115,5 +116,6 @@ class CircularQueue:
 
 ## 以下代码为测试
 if __name__ == "__main__":
-    asr = ASR()
+    config = ConfigManager()
+    asr = ASR(config=config)
     asr.Scan_and_asr()

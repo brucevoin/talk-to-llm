@@ -3,26 +3,32 @@ Description:
 Author: haichun feng
 Date: 2024-03-26 17:49:55
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 17:56:46
+LastEditTime: 2024-03-27 14:54:26
 '''
 
 import box
 import yaml
 
-AUDIO_FILES_DIRECTORY = ''
+class ConfigManager:
+    def __init__(self):
+        self.config_data = box.Box()
+        self.load_config('config.yml')
 
-def Load_config():
-    with open("config.yml", "r", encoding="utf8") as configuration:
-        cfg = box.Box(yaml.safe_load(configuration))
-        global AUDIO_FILES_DIRECTORY
-        AUDIO_FILES_DIRECTORY = cfg.AUDIO_FILES_DIRECTORY
+    def load_config(self,config_file):
+        with open(config_file, "r", encoding="utf8") as configuration:
+            cfg = box.Box(yaml.safe_load(configuration))
+            self.config_data = cfg
 
-def Get_AUDIO_FILES_DIRECTORY():
-    if AUDIO_FILES_DIRECTORY == '':
-        Load_config()
-    return AUDIO_FILES_DIRECTORY
+    def get_config(self, key):
+        data = self.config_data
+        if key in data:
+            return data[key]
+        else:
+            raise InvalidAgeError("Config item not exists")
 
 
 if __name__ == "__main__":
-    Load_config()
-    print(Get_AUDIO_FILES_DIRECTORY())
+    config = ConfigManager()
+    print(config.get_config("AUDIO_FILES_DIRECTORY"))
+    # Load_config()
+    # print(get_AUDIO_FILES_DIRECTORY())

@@ -3,20 +3,20 @@ Description:
 Author: haichun feng
 Date: 2024-03-26 16:06:49
 LastEditor: haichun feng
-LastEditTime: 2024-03-27 09:39:23
+LastEditTime: 2024-03-27 14:33:27
 '''
 
 from playsound import playsound
 from TTS.api import TTS
 
-from config_reader import Get_AUDIO_FILES_DIRECTORY
+from config_reader import get_AUDIO_FILES_DIRECTORY
 
 
 class AudioOutput:
     def __init__(self):
         print("loading TTS model")
         self.tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2", gpu=False)
-        self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
+        self.AUDIO_FILES_DIRECTORY = get_AUDIO_FILES_DIRECTORY()
 
     def speak(self, text_str):
 

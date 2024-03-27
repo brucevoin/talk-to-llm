@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-26 18:17:47
+LastEditTime: 2024-03-27 15:02:01
 '''
 
 import pyaudio
@@ -11,12 +11,13 @@ import wave
 import time
 import os
 
-from config_reader import Get_AUDIO_FILES_DIRECTORY
+from config_reader import ConfigManager
 
 
 class AudioRecorder:
 
-    def __init__(self):
+    def __init__(self,config):
+        self.config = config
         self.FORMAT = pyaudio.paInt16
         self.CHANNELS = 1
         self.RATE = 44100
@@ -26,8 +27,7 @@ class AudioRecorder:
         self.audio = pyaudio.PyAudio()
         self.stream = pyaudio.Stream
         self.FILE_COUNT_LIMIT = 10
-        self.AUDIO_FILES_DIRECTORY = Get_AUDIO_FILES_DIRECTORY()
-
+        self.AUDIO_FILES_DIRECTORY = config.get_config('AUDIO_FILES_DIRECTORY')
     def Listening(self):
         self.stream = self.audio.open(
             format=self.FORMAT,
@@ -77,5 +77,6 @@ class AudioRecorder:
         self.audio.terminate()
 
 if __name__ == "__main__":
-    instance = AudioRecorder()
+    config = ConfigManager()
+    instance = AudioRecorder(config=config)
     instance.Listening()

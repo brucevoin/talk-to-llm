@@ -1,3 +1,9 @@
-AUDIO_FILES_DIRECTORY: '/Users/fhc/Downloads'
+AUDIO_FILES_DIRECTORY: 'test_data'
+# 音频输入语言
 AUDIO_INPUT_LANGUAGE: 'zh'
+# 音频输出语言
 AUDIO_OUTPUT_LANGUAGE: 'zh'
+# 静音或噪音概率门限
+NO_SPEECH_PROB_THRESHOLD: 0.5
+# 音频输入断句门限
+AUDIO_INPUT_BREAK_THRESHOLD: 3
