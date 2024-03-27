@@ -16,6 +16,8 @@ import os
 import time
 from collections import deque
 
+# For unit test
+#from talk_to_llm.config_reader import ConfigManager
 from config_reader import ConfigManager
 
 
@@ -56,13 +58,15 @@ class ASR:
             )
             print(segment)
             print(f"-------------{s.calculate_no_speech_time()}")
-            if self.Is_a_break(s):
-                self.queue.enqueue(s)
+            if self.is_a_break(s):
+                ## 之前的是一段
                 print(self.queue.dequeue_all())
+                ## 之后的是下一段
+                self.queue.enqueue(s)
             else:
                 self.queue.enqueue(s)
 
-    def Is_a_break(self, segment):
+    def is_a_break(self, segment):
         if segment.no_speech_prob >0.5:
             return True
         if segment.calculate_no_speech_time() >= 3:
@@ -109,7 +113,7 @@ class CircularQueue:
 
     def dequeue_all(self):
         text = ""
-        if not self.is_empty():
+        while not self.is_empty():
             text += self.dequeue().text
         return text
 

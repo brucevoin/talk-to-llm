@@ -3,16 +3,16 @@ Description:
 Author: haichun feng
 Date: 2024-03-26 17:49:55
 LastEditor: haichun feng
-LastEditTime: 2024-03-27 14:54:26
+LastEditTime: 2024-03-27 16:32:11
 '''
 
 import box
 import yaml
 
 class ConfigManager:
-    def __init__(self):
+    def __init__(self,config_file='config.yml'):
         self.config_data = box.Box()
-        self.load_config('config.yml')
+        self.load_config(config_file=config_file)
 
     def load_config(self,config_file):
         with open(config_file, "r", encoding="utf8") as configuration:
