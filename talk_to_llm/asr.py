@@ -1,5 +1,5 @@
 """
-Description: 
+Description:
 Author: haichun feng
 Date: 2024-03-22 15:22:07
 LastEditor: haichun feng
@@ -17,8 +17,8 @@ import time
 from collections import deque
 
 # For unit test
-#from talk_to_llm.config_reader import ConfigManager
-from config_reader import ConfigManager
+from talk_to_llm.config_reader import ConfigManager
+#from config_reader import ConfigManager
 
 
 class ASR:
@@ -60,7 +60,9 @@ class ASR:
             print(f"-------------{s.calculate_no_speech_time()}")
             if self.is_a_break(s):
                 ## 之前的是一段
+                print('---------------This is a break---------------')
                 print(self.queue.dequeue_all())
+                print('---------------------------------------------')
                 ## 之后的是下一段
                 self.queue.enqueue(s)
             else:
@@ -69,9 +71,9 @@ class ASR:
     def is_a_break(self, segment):
         if segment.no_speech_prob >0.5:
             return True
-        if segment.calculate_no_speech_time() >= 3:
-            return True
-        if self.queue.last_item is not None and (5 - segment.start) + (5 - self.queue.last_item.end) >= 3:
+        # if segment.calculate_no_speech_time() >= 3:
+        #     return True
+        if self.queue.last_item is not None and (segment.start) + (5 - self.queue.last_item.end) >= 3:
             return True
         return False
 
@@ -82,10 +84,6 @@ class Segment:
         self.start = start
         self.end = end
         self.no_speech_prob = no_speech_prob
-
-    def calculate_no_speech_time(self):
-        ## 可配置
-        return 5 - self.end
 
 
 class CircularQueue:

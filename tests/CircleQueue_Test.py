@@ -1,5 +1,5 @@
 '''
-Description: 
+Description:
 Author: haichun feng
 Date: 2024-03-26 16:14:31
 LastEditor: haichun feng
@@ -32,10 +32,20 @@ class TestConfig(unittest.TestCase):
         segment2 = asr.Segment(text="2", start = 4, end = 5, no_speech_prob=0)
         self.assertTrue(asr_instance.is_a_break(segment2))
 
-        
 
+    def test_is_break2(self):
+        config = config_reader.ConfigManager('talk_to_llm/config.yml')
+        asr_instance = asr.ASR(config= config)
 
-            
+        segment1 = asr.Segment(text="你好 请问明天", start = 0.0, end = 5.0, no_speech_prob=0.05024284869432449)
+        asr_instance.queue.enqueue(segment1)
+
+        segment2 = asr.Segment(text="会下雨吗", start = 0.0, end = 2.0, no_speech_prob=0.24193963408470154)
+
+        print(segment2.no_speech_prob)
+        print((segment2.start) + (5-asr_instance.queue.last_item.end))
+        self.assertFalse(asr_instance.is_a_break(segment2))
+
 
 if __name__ == '__main__':
     unittest.main()
