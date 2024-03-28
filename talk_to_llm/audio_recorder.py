@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-28 18:06:32
+LastEditTime: 2024-03-28 18:11:50
 '''
 
 import pyaudio
@@ -18,12 +18,12 @@ from config_reader import ConfigManager
 
 class AudioRecorder(threading.Thread):
 
-    def __init__(self,config,control_event):
+    def __init__(self,config,control_event,work_queue):
         super(AudioRecorder, self).__init__()
 
         self.control_event = control_event
 
-        self.work_queue = queue.Queue()
+        self.work_queue = work_queue
 
         self.config = config
         self.FORMAT = pyaudio.paInt16
