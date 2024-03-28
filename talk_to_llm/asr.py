@@ -14,33 +14,41 @@ from dataclasses import dataclass
 
 import os
 import time
+import threading
 from collections import deque
+import queue
 
 # For unit test
-from talk_to_llm.config_reader import ConfigManager
-#from config_reader import ConfigManager
+#from talk_to_llm.config_reader import ConfigManager
+from config_reader import ConfigManager
+from audio_recorder import AudioRecorder
 
-
-class ASR:
-    def __init__(self,config):
+class ASR(threading.Thread):
+    def __init__(self,config,control_event,work_queue):
+        super(ASR,self).__init__()
+        self.work_queue = work_queue
         self.config = config
         self.model = whisper.load_model("base")
         self.AUDIO_FILES_DIRECTORY = config.get_config('AUDIO_FILES_DIRECTORY')
-        self.queue = CircularQueue(size=30)
+        self.segment_queue = CircularQueue(size=30)
+        self.control_event = control_event
+
+    def run(self):
+        self.Scan_and_asr()
 
     def Scan_and_asr(self):
-        wav_num = 0
         while True:
-            file_path = f"{self.AUDIO_FILES_DIRECTORY}/output_{wav_num}.wav"
+            self.control_event.set()
+
+            file_path = self.work_queue.get()
+            if(file_path) is None:
+                time.sleep(5)
+                continue
             if os.path.exists(file_path) and os.access(file_path, os.R_OK):
                 print(f"detect audio file:{file_path}")
                 asr_input = self.Asr(file_path)
                 ## 测试时不删除文件
                 ## os.remove(file_path)
-                wav_num += 1
-                ## TODO 录音与ASR之间需要同步控制状态信息
-                if wav_num == 10:
-                    wav_num = 0
             else:
                 time.sleep(5)
 
@@ -57,23 +65,25 @@ class ASR:
                 no_speech_prob=segment["no_speech_prob"],
             )
             print(segment)
-            print(f"-------------{s.calculate_no_speech_time()}")
             if self.is_a_break(s):
                 ## 之前的是一段
                 print('---------------This is a break---------------')
-                print(self.queue.dequeue_all())
+                ## todo 调用模型服务
+                self.control_event.clear()
+                print(self.segment_queue.dequeue_all())
+                self.recorder.continue_listen()
                 print('---------------------------------------------')
                 ## 之后的是下一段
-                self.queue.enqueue(s)
+                self.segment_queue.enqueue(s)
             else:
-                self.queue.enqueue(s)
+                self.segment_queue.enqueue(s)
 
     def is_a_break(self, segment):
         if segment.no_speech_prob >0.5:
             return True
         # if segment.calculate_no_speech_time() >= 3:
         #     return True
-        if self.queue.last_item is not None and (segment.start) + (5 - self.queue.last_item.end) >= 3:
+        if self.segment_queue.last_item is not None and (segment.start) + (5 - self.segment_queue.last_item.end) >= 3:
             return True
         return False
 
@@ -119,5 +129,6 @@ class CircularQueue:
 ## 以下代码为测试
 if __name__ == "__main__":
     config = ConfigManager()
-    asr = ASR(config=config)
+    recorder = AudioRecorder(config=config)
+    asr = ASR(config=config,recorder=recorder)
     asr.Scan_and_asr()

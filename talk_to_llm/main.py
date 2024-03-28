@@ -1,12 +1,17 @@
 '''
+Description: 
+Author: haichun feng
+Date: 2024-03-26 16:06:49
+LastEditor: haichun feng
+LastEditTime: 2024-03-28 17:28:58
+'''
+"""
 Description: r
 Author: haichun feng
 Date: 2024-03-22 17:42:13
 LastEditor: haichun feng
-LastEditTime: 2024-03-27 14:58:05
-'''
-
-
+LastEditTime: 2024-03-28 17:16:20
+"""
 
 import threading
 import time
@@ -16,14 +21,14 @@ from audio_recorder import AudioRecorder
 from asr import ASR
 from config_reader import ConfigManager
 
-def audio_input(config):
-    audioInput_instance = AudioRecorder(config=config)
-    audioInput_instance.Listening()
+# def audio_input(config):
+#     audioInput_instance = AudioRecorder(config=config)
+#     audioInput_instance.Listening()
 
 
-def asr(config):
-    asr_instance = ASR(config=config)
-    asr_instance.Scan_and_asr()
+# def asr(config):
+#     asr_instance = ASR(config=config)
+#     asr_instance.Scan_and_asr()
 
 
 ## 考虑将Recorder与ASR合并
@@ -31,8 +36,11 @@ def asr(config):
 if __name__ == "__main__":
     config = ConfigManager()
 
-    audio_input_thread = threading.Thread(target=audio_input,args=config)
-    audio_input_thread.start()
+    audioInput_instance = AudioRecorder(config=config)
+    
+    asr_instance = ASR(config=config, recorder=audioInput_instance)
 
-    asr_thread = threading.Thread(target=asr,args=config)
-    asr_thread.start()
+    audioInput_instance.run()
+
+    asr_instance.run()
+

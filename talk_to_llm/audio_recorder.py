@@ -3,20 +3,28 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-27 15:02:01
+LastEditTime: 2024-03-28 18:06:32
 '''
 
 import pyaudio
 import wave
 import time
 import os
+import threading
+import queue
 
 from config_reader import ConfigManager
 
 
-class AudioRecorder:
+class AudioRecorder(threading.Thread):
 
-    def __init__(self,config):
+    def __init__(self,config,control_event):
+        super(AudioRecorder, self).__init__()
+
+        self.control_event = control_event
+
+        self.work_queue = queue.Queue()
+
         self.config = config
         self.FORMAT = pyaudio.paInt16
         self.CHANNELS = 1
@@ -26,8 +34,14 @@ class AudioRecorder:
 
         self.audio = pyaudio.PyAudio()
         self.stream = pyaudio.Stream
-        self.FILE_COUNT_LIMIT = 10
+        self.FILE_COUNT_LIMIT = 100
         self.AUDIO_FILES_DIRECTORY = config.get_config('AUDIO_FILES_DIRECTORY')
+        self.stop = False
+
+    def run(self):
+        self.Listening()
+        
+
     def Listening(self):
         self.stream = self.audio.open(
             format=self.FORMAT,
@@ -43,6 +57,7 @@ class AudioRecorder:
 
         # 持续录音并生成WAV文件
         while True:
+            self.control_event.wait()
             data = self.stream.read(self.CHUNK, exception_on_overflow=False)
             frames.append(data)
             elapsed_time = time.time() - start_time
@@ -58,6 +73,7 @@ class AudioRecorder:
                 waveFile.writeframes(b"".join(frames))
                 waveFile.close()
 
+                self.work_queue.put(file_path)
                 # 重置frames和开始时间
                 frames = []
                 start_time = time.time()
@@ -69,9 +85,18 @@ class AudioRecorder:
                         self.FILE_COUNT_LIMIT *= 2
                     else:
                         wav_num = 0
+            self.control_event.clear()
 
-    def Stop_Listen(self):
+    def stop_listen(self):
         # 停止数据流
+        print("stopping listen")
+        self.stop = True
+
+    def continue_listen(self):
+        print("continue listen")
+        self.stop = False
+
+    def shutdown(self):
         self.stream.stop_stream()
         self.stream.close()
         self.audio.terminate()
