@@ -69,9 +69,8 @@ class ASR(threading.Thread):
                 ## 之前的是一段
                 print('---------------This is a break---------------')
                 ## todo 调用模型服务
-                self.control_event.clear()
                 print(self.segment_queue.dequeue_all())
-                self.recorder.continue_listen()
+                self.control_event.clear()
                 print('---------------------------------------------')
                 ## 之后的是下一段
                 self.segment_queue.enqueue(s)

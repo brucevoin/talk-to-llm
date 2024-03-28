@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-28 18:11:50
+LastEditTime: 2024-03-28 18:13:48
 '''
 
 import pyaudio
@@ -87,14 +87,6 @@ class AudioRecorder(threading.Thread):
                         wav_num = 0
             self.control_event.clear()
 
-    def stop_listen(self):
-        # 停止数据流
-        print("stopping listen")
-        self.stop = True
-
-    def continue_listen(self):
-        print("continue listen")
-        self.stop = False
 
     def shutdown(self):
         self.stream.stop_stream()
