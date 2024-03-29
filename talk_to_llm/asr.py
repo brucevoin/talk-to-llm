@@ -34,7 +34,13 @@ class ASR(threading.Thread):
         self.control_event = control_event
 
     def run(self):
-        self.Scan_and_asr()
+        try:
+            self.Scan_and_asr()
+        except KeyboardInterrupt:
+            print("ASR interrupted by the user.")
+        finally:
+            # TODO
+            print("cleaning up resources...")
 
     def Scan_and_asr(self):
         while True:

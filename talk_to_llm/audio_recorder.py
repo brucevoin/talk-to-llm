@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-22 17:59:19
 LastEditor: haichun feng
-LastEditTime: 2024-03-28 18:13:48
+LastEditTime: 2024-03-29 10:42:05
 '''
 
 import pyaudio
@@ -39,8 +39,12 @@ class AudioRecorder(threading.Thread):
         self.stop = False
 
     def run(self):
-        self.Listening()
-        
+        try:
+            self.Listening()
+        except KeyboardInterrupt:
+            print("Recorder interrupted by the user.")
+        finally:
+            self.shutdown()
 
     def Listening(self):
         self.stream = self.audio.open(
