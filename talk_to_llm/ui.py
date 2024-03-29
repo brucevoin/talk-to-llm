@@ -3,10 +3,13 @@ Description:
 Author: haichun feng
 Date: 2024-03-29 14:27:25
 LastEditor: haichun feng
-LastEditTime: 2024-03-29 14:54:45
+LastEditTime: 2024-03-29 15:36:31
 '''
 import streamlit as st
 import requests
+
+def stop_talking():
+    print("Hello")
 
 # Title
 st.title("Talk to LLMs")
@@ -15,11 +18,13 @@ st.title("Talk to LLMs")
 # url = st.text_input("Enter URL", "https://localhost/generate")
 url = "backend service URL"
 
-button_text = "Start Talking"
 # Button to trigger HTTP request
-if st.button(button_text):
+if st.button("Start Talking"):
     try:
         # Make HTTP request
+        button_text = "Stop Talking"
+        st.button("Stop Talking", on_click= stop_talking)
+
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for non-2xx status codes
 
