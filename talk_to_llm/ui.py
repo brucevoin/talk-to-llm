@@ -3,7 +3,7 @@ Description:
 Author: haichun feng
 Date: 2024-03-29 14:27:25
 LastEditor: haichun feng
-LastEditTime: 2024-03-29 16:02:09
+LastEditTime: 2024-03-29 16:52:47
 '''
 import streamlit as st
 import requests
@@ -25,7 +25,11 @@ if st.button("Start Talking"):
         # Make HTTP request
         button_text = "Stop Talking"
         st.button("Stop Talking", on_click= stop_talking)
-
+        # TODO 使用浏览器麦克风录音
+        ## 可选：
+        ## - streamlit-mic-recorder
+        ## - streamlit-audio-recorder
+        ## - audio-recorder-streamlit
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for non-2xx status codes
 
