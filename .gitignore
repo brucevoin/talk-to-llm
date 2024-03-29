@@ -5,3 +5,4 @@ tests/__pycache__/unittest_example.cpython-310.pyc
 tests/__pycache__/__init__.cpython-310.pyc
 tests/__pycache__/CircleQueue_Test.cpython-310.pyc
 talk_to_llm/__pycache__/config_reader.cpython-310.pyc
+tests/__pycache__/config_test.cpython-310-pytest-8.1.1.pyc
