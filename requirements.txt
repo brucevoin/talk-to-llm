@@ -5,3 +5,4 @@ llama-index-llms-ollama
 python-box
 pytest
 streamlit
+streamlit_lottie
